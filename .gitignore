@@ -1,0 +1,301 @@
+# ============================================
+# .gitignore — Projet presence_cours
+# Stack : PHP, MySQL, XAMPP, Vanilla JS
+# ============================================
+
+# ============================================
+# 1. FICHIERS DE CONFIGURATION SENSIBLES
+# ============================================
+# Config locale (à ne jamais committer si elle contient des mots de passe)
+includes/config.local.php
+includes/config.dev.php
+includes/config.prod.php
+includes/.env
+.env
+.env.*
+!.env.example
+
+# Fichiers de credentials
+*.credentials
+credentials.json
+secrets.json
+*.secret
+
+# ============================================
+# 2. DÉPENDANCES & PACKAGES
+# ============================================
+# Composer (si utilisé plus tard)
+/vendor/
+composer.lock
+composer.phar
+
+# Node.js / NPM (si ajout de build tools)
+/node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Bower (legacy)
+/bower_components/
+
+# ============================================
+# 3. FICHIERS XAMPP / SERVEUR LOCAL
+# ============================================
+# Logs Apache/XAMPP
+*.log
+logs/
+/logs/
+apache/logs/
+xampp/logs/
+
+# Fichiers de cache XAMPP
+xampp-control.ini
+xampp-control.log
+
+# ============================================
+# 4. BASES DE DONNÉES & BACKUPS
+# ============================================
+# Dumps SQL locaux (sauf le fichier de structure initial)
+database/*.sql.bak
+database/*_dump.sql
+database/*_backup.sql
+database/backup/
+database/dumps/
+*.sql.gz
+*.db
+
+# Sauf la structure principale (à versionner)
+!database/presence_cours.sql
+
+# ============================================
+# 5. FICHIERS D'UPLOAD / MÉDIA UTILISATEUR
+# ============================================
+# Uploads (photos de profil, documents, etc.)
+/uploads/
+assets/uploads/
+uploads/users/
+uploads/temp/
+assets/images/users/
+
+# Fichiers temporaires d'upload
+*.tmp
+*.temp
+/tmp/
+
+# ============================================
+# 6. EXPORTS GÉNÉRÉS (CSV, PDF, etc.)
+# ============================================
+exports/
+/reports/
+*.csv
+*.pdf
+*.xlsx
+!assets/samples/*.csv
+
+# ============================================
+# 7. FICHIERS SYSTÈME D'EXPLOITATION
+# ============================================
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+*.stackdump
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Linux
+*~
+.directory
+.Trash-*
+.fuse_hidden*
+
+# ============================================
+# 8. ÉDITEURS & IDE
+# ============================================
+# Visual Studio Code
+.vscode/
+!.vscode/settings.json.example
+!.vscode/extensions.json
+*.code-workspace
+
+# JetBrains (PHPStorm, IntelliJ, WebStorm)
+.idea/
+*.iml
+*.ipr
+*.iws
+.idea_modules/
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+sftp-config.json
+
+# Vim
+*.swp
+*.swo
+*~
+.vim/
+
+# Emacs
+*~
+\#*\#
+.\#*
+
+# NetBeans
+nbproject/
+nbproject/private/
+nbbuild/
+dist/
+nbdist/
+
+# Eclipse
+.project
+.classpath
+.settings/
+build/
+.buildpath
+
+# Atom
+.atom/
+.atom-build.json
+
+# ============================================
+# 9. CACHE & FICHIERS TEMPORAIRES PHP
+# ============================================
+# Cache PHP
+/cache/
+*.cache
+.php-cache/
+.phpunit.result.cache
+
+# Sessions PHP (si stockées localement)
+/sessions/
+sess_*
+sessions/*
+
+# Fichiers temporaires PHP
+*.phtml.bak
+*.php.bak
+*.php~
+*.php.orig
+
+# ============================================
+# 10. LOGS & DEBUG
+# ============================================
+# Logs applicatifs
+logs/*.log
+/app/logs/
+/var/log/
+
+# Debug bar (si utilisé)
+debugbar/
+storage/debugbar/
+
+# Rapports d'erreurs
+error_log
+php_errors.log
+
+# ============================================
+# 11. SÉCURITÉ & CERTIFICATS
+# ============================================
+# Certificats SSL locaux
+*.pem
+*.key
+*.crt
+!assets/samples/*.pem
+
+# Fichiers .htpasswd (si utilisés)
+.htpasswd
+.htaccess.local
+
+# ============================================
+# 12. FICHIERS DE BUILD & COMPILATION
+# ============================================
+# Si ajout de compilateurs Sass/Less plus tard
+.sass-cache/
+.sass-cache/*
+*.css.map
+*.js.map
+
+# Fichiers minifiés générés (décommenter si build auto)
+# assets/css/*.min.css
+# assets/js/*.min.js
+
+# ============================================
+# 13. TESTS & COUVERTURE (si ajoutés plus tard)
+# ============================================
+/coverage/
+/.phpunit/
+phpunit.xml
+.phpunit.cache/
+
+# ============================================
+# 14. BACKUPS & FICHIERS DE SAUVEGARDE
+# ============================================
+*.bak
+*.backup
+*.old
+*.orig
+*~
+*.save
+
+# ============================================
+# 15. FICHIERS SPÉCIFIQUES AU PROJET
+# ============================================
+# Notes personnelles (à ne pas partager)
+/notes/
+NOTES.md
+TODO.local.md
+
+# Configuration locale de l'environnement
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Fichiers de test locaux
+/test-local/
+/scratch/
+/playground/
+
+# Fichiers de démo temporaires
+demo/
+demo_data.sql
+
+# ============================================
+# 16. NAVIGATEURS & OUTILS DE DÉVELOPPEMENT
+# ============================================
+# Chrome DevTools
+chrome-debug.log
+
+# Firefox
+firefox-debug.log
+
+# ============================================
+# 17. AUTRES
+# ============================================
+# Fichiers ZIP/RAR générés
+*.zip
+*.rar
+*.7z
+!assets/samples/*.zip
+
+# Fichiers de configuration de déploiement
+ftpconfig.json
+sftp-config.json
+deploy.json
+deployment/
+
+# Fichiers de tracking analytics local
+analytics.json
+analytics.log
