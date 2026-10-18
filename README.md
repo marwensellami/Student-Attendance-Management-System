@@ -158,23 +158,7 @@ http://localhost/presence_cours/
 |------|-------|----------|
 | **Admin** | `admin@presence-cours.com` | `password` |
 | **Teacher** | `dupont@universite.com` | `password` |
-| **Student** | `leroy@etudiant.com` | `password` |
-
-> ⚠️ **Security note:** Change these credentials and re-hash the passwords before any production deployment.
-
----
-
-## 📸 Screenshots
-
-> *(Add your own screenshots in a `docs/screenshots/` folder and reference them here)*
-
-| Admin Dashboard | Teacher Dashboard | Student Dashboard |
-|:---:|:---:|:---:|
-| ![Admin](docs/screenshots/admin-dashboard.png) | ![Teacher](docs/screenshots/teacher-dashboard.png) | ![Student](docs/screenshots/student-dashboard.png) |
-
-| Attendance Tracking | Statistics & Charts | Profile Management |
-|:---:|:---:|:---:|
-| ![Attendance](docs/screenshots/attendance.png) | ![Stats](docs/screenshots/statistics.png) | ![Profile](docs/screenshots/profile.png) |
+| **Student** | `leroy@etudiant.com` | `password` 
 
 ---
 
