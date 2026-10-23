@@ -1,13 +1,15 @@
 <div align="center">
 
-# 🎓 Student Attendance Management and Tracking System for Online Learning
+# 🎓 Student Attendance Management System with AI Face Recognition
 
-**A full-stack multi-role web platform for real-time student attendance tracking, with interactive dashboards, dynamic statistical reporting, and automated CSV exports.**
+**A full-stack multi-role web platform combined with an AI-powered facial recognition module for real-time student attendance tracking, with interactive dashboards, dynamic statistical reporting, and automated CSV exports.**
 
 [![PHP](https://img.shields.io/badge/PHP-8.2-777BB4?style=flat&logo=php&logoColor=white)](https://www.php.net/)
 [![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?style=flat&logo=mysql&logoColor=white)](https://www.mysql.com/)
 [![JavaScript](https://img.shields.io/badge/JavaScript-ES6-F7DF1E?style=flat&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 [![Chart.js](https://img.shields.io/badge/Chart.js-4.4-FF6384?style=flat&logo=chartdotjs&logoColor=white)](https://www.chartjs.org/)
+[![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=flat&logo=python&logoColor=white)](https://www.python.org/)
+[![OpenCV](https://img.shields.io/badge/OpenCV-4.x-5C3EE8?style=flat&logo=opencv&logoColor=white)](https://opencv.org/)
 [![XAMPP](https://img.shields.io/badge/XAMPP-8.2-FB7A24?style=flat&logo=xampp&logoColor=white)](https://www.apachefriends.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -15,7 +17,7 @@
 [![GitHub repo size](https://img.shields.io/github/repo-size/marwensellami/Student-Attendance-Management-System)](https://github.com/marwensellami/Student-Attendance-Management-System)
 [![GitHub stars](https://img.shields.io/github/stars/marwensellami/Student-Attendance-Management-System?style=social)](https://github.com/marwensellami/Student-Attendance-Management-System)
 
-[Overview](#-overview) • [Features](#-key-features) • [Tech Stack](#-tech-stack) • [Getting Started](#-getting-started) • [Demo](#-demo-accounts) • [Security](#-security-features) • [Author](#-author)
+[Overview](#-overview) • [Features](#-key-features) • [Tech Stack](#-tech-stack) • [AI Module](#-ai-face-recognition-module) • [Getting Started](#-getting-started) • [Demo](#-demo-accounts) • [Security](#-security-features) • [Author](#-author)
 
 </div>
 
@@ -23,13 +25,15 @@
 
 ## 📖 Overview
 
-This project is a complete attendance management solution designed for educational institutions delivering online courses. It provides **three distinct role-based interfaces** — Administrator, Teacher, and Student — each with a tailored experience for managing, tracking, and analyzing attendance data.
+This project is a complete attendance management solution designed for educational institutions delivering online and hybrid courses. It provides **three distinct role-based interfaces** — Administrator, Teacher, and Student — each with a tailored experience for managing, tracking, and analyzing attendance data.
 
-Built from scratch with **PHP and MySQL**, the system covers the full lifecycle of attendance management:
+The system combines a **classic manual attendance workflow** (teacher marks present/absent) with an **AI-powered facial recognition module** that automates student identification and attendance marking from webcam or photo input.
 
-> **Planning → Recording → Analysis → Reporting**
+Built from scratch with **PHP, MySQL, and Python**, the platform covers the full lifecycle of attendance management:
 
-The goal is to replace manual spreadsheets with a centralized, secure, and interactive platform that reduces administrative workload while improving data accuracy and decision-making.
+> **Planning → Recording (manual + AI) → Analysis → Reporting**
+
+The goal is to replace manual spreadsheets with a centralized, secure, and interactive platform that reduces administrative workload while improving data accuracy through computer vision.
 
 ---
 
@@ -57,6 +61,7 @@ The goal is to replace manual spreadsheets with a centralized, secure, and inter
 - Track student attendance per session and per course
 - View individual student history
 - **Identify assiduous vs. absentee students** through visual indicators
+- **Automatic attendance marking** via facial recognition
 - Generate comparative reports with statistics per session
 - CSV export for offline analysis
 
@@ -66,7 +71,14 @@ The goal is to replace manual spreadsheets with a centralized, secure, and inter
 - Personal dashboard showing participation rate and performance indicators
 - Per-course statistics with visual progress bars
 
-### 📊 5. Cross-Cutting Features
+### 🤖 5. AI Face Recognition Module
+- **Real-time face detection** using OpenCV
+- **Face embedding extraction** with VGGFace (deep learning model)
+- **Automatic attendance marking** by matching live captures against enrolled student photos
+- Hybrid integration: PHP frontend calls a Python pipeline for inference
+- Handles enrollment, verification, and unknown-face rejection
+
+### 📊 6. Cross-Cutting Features
 - **Interactive charts** powered by Chart.js (doughnut, bar, line, radar)
 - **Real-time search and filtering** on all tables
 - **Responsive design** with dark mode support
@@ -79,13 +91,63 @@ The goal is to replace manual spreadsheets with a centralized, secure, and inter
 
 | Layer | Technologies |
 |-------|-------------|
-| **Backend** | PHP 8.2, PDO (prepared statements), MySQL 8.0 |
-| **Frontend** | HTML5, CSS3 (custom design system), Vanilla JavaScript (ES6) |
+| **Web Backend** | PHP 8.2, PDO (prepared statements), MySQL 8.0 |
+| **Web Frontend** | HTML5, CSS3 (custom design system), Vanilla JavaScript (ES6) |
 | **Visualization** | Chart.js (doughnut, bar, line, radar charts) |
+| **AI / CV Module** | Python 3.10+, OpenCV, VGGFace, NumPy, Pickle |
+| **Web ↔ AI Bridge** | PHP `shell_exec` calling Python CLI scripts |
 | **Architecture** | MVC-inspired, modular, session-based |
 | **Environment** | XAMPP (Apache + MySQL + PHP) |
 | **Database Tools** | phpMyAdmin |
 | **Version Control** | Git, GitHub |
+
+---
+
+## 🤖 AI Face Recognition Module
+
+The system includes a **hybrid PHP + Python pipeline** for automatic attendance marking.
+
+### Workflow
+
+```
+Webcam / Photo capture
+        │
+        ▼
+PHP front-end (test_face_recognition.php)
+        │
+        ▼
+Python CLI (check_face.py)
+        │
+        ├── OpenCV → face detection & alignment
+        │
+        ├── VGGFace → deep face embedding extraction
+        │
+        ├── Pickle DB (ds_model_vggface_detector_opencv_aligned_normalization_base_expand_0.pkl)
+        │            → face matching against enrolled students
+        │
+        └── Result → JSON back to PHP
+        │
+        ▼
+MySQL → attendance table (present / absent / unknown)
+```
+
+### Key Components
+
+| Component | Role |
+|-----------|------|
+| `check_face.py` | Python entry point for face detection, embedding & matching |
+| `test_face_recognition.php` | PHP endpoint that triggers the Python pipeline |
+| `assets/photo_etudiant/` | Enrolled student photos (used as reference) |
+| `assets/temp_photos/` | Temporary verification captures |
+| `assets/temp_db/*.pkl` | Pre-trained VGGFace model & face database (pickled) |
+
+### Design Notes
+
+- **Privacy-first**: all inference runs **locally** — no cloud API calls, no external services.
+- **Modular**: the AI module is decoupled from the PHP core; PHP only consumes a JSON output.
+- **Extensible**: model and matching threshold are easily swappable.
+
+> ⚠️ **Repository policy:** student photos and the `.pkl` model file are **excluded** from version control (GDPR + repository size). Place them locally following the instructions below.
 
 ---
 
@@ -109,8 +171,14 @@ The `attendance` table supports **four statuses**: `present`, `absent`, `retard`
 ## 🚀 Getting Started
 
 ### Prerequisites
+
 - **XAMPP** (Apache + MySQL + PHP 8.0+)
+- **Python 3.10+** with:
+  ```bash
+  pip install opencv-python numpy keras-facenet pickle5
+  ```
 - A modern **web browser** (Chrome, Firefox, Edge)
+- (For AI module) A working **webcam** or sample student photos
 
 ### Installation
 
@@ -135,7 +203,7 @@ sudo mv Student-Attendance-Management-System /opt/lampp/htdocs/presence_cours
 - Import the file `database/presence_cours.sql`
 
 **4. Configure the application**
-- Open `includes/config.php`
+- Copy `includes/config.example.php` to `includes/config.php`
 - Adjust the credentials if needed:
 ```php
 define('DB_HOST', 'localhost');
@@ -145,7 +213,30 @@ define('DB_PASS', '');
 define('BASE_URL', 'http://localhost/presence_cours');
 ```
 
-**5. Launch the application** 🎉
+**5. Set up the AI Face Recognition module**
+
+Create the required local folders (excluded from Git for privacy):
+
+```bash
+mkdir -p assets/photo_etudiant assets/temp_photos assets/temp_db
+```
+
+Download or copy the pre-trained VGGFace model:
+
+```
+assets/temp_db/ds_model_vggface_detector_opencv_aligned_normalization_base_expand_0.pkl
+```
+
+> 💡 This model is **not** included in the repository (size + privacy). It can be regenerated or downloaded from the official VGGFace distribution.
+
+**6. Verify Python dependencies**
+
+```bash
+python check_face.py --help
+```
+
+**7. Launch the application** 🎉
+
 ```
 http://localhost/presence_cours/
 ```
@@ -158,7 +249,23 @@ http://localhost/presence_cours/
 |------|-------|----------|
 | **Admin** | `admin@presence-cours.com` | `password` |
 | **Teacher** | `dupont@universite.com` | `password` |
-| **Student** | `leroy@etudiant.com` | `password` 
+| **Student** | `leroy@etudiant.com` | `password` |
+
+> ⚠️ **Security note:** Change these credentials and re-hash the passwords before any production deployment.
+
+---
+
+## 📸 Screenshots
+
+> *(Add your own screenshots in a `docs/screenshots/` folder and reference them here)*
+
+| Admin Dashboard | Teacher Dashboard | Student Dashboard |
+|:---:|:---:|:---:|
+| ![Admin](docs/screenshots/admin-dashboard.png) | ![Teacher](docs/screenshots/teacher-dashboard.png) | ![Student](docs/screenshots/student-dashboard.png) |
+
+| Face Recognition | Statistics & Charts | Attendance Tracking |
+|:---:|:---:|:---:|
+| ![Face](docs/screenshots/face-recognition.png) | ![Stats](docs/screenshots/statistics.png) | ![Attendance](docs/screenshots/attendance.png) |
 
 ---
 
@@ -213,17 +320,17 @@ presence_cours/
 │   │   ├── style.css
 │   │   └── dashboard.css
 │   ├── js/
-│   │   └── main.js
-│   ├── photo_etudiant/
-│   ├── temp_photos/
-│   └── temp_db/
+│   │   ├── main.js
+│   │   └── charts.js
+│   ├── photo_etudiant/        # (gitignored) enrolled student photos
+│   ├── temp_photos/           # (gitignored) verification captures
+│   └── temp_db/               # (gitignored) VGGFace model + face DB
 │
 ├── database/
 │   └── presence_cours.sql     # Full schema + demo data
 │
-├── check_face.py
-├── test_db.php
-├── test_face_recognition.php
+├── check_face.py              # AI face recognition pipeline (Python)
+├── test_face_recognition.php  # PHP ↔ Python bridge
 ├── index.php                  # Entry point
 ├── README.md
 ├── LICENSE
@@ -243,27 +350,32 @@ This project follows security best practices for PHP web applications:
 - ✅ **Role-Based Access Control (RBAC)** enforced at the router level
 - ✅ **Input sanitization** (`htmlspecialchars`) across all endpoints
 - ✅ **Automatic session timeout** to prevent abandoned sessions
+- ✅ **Local-only AI inference** — no data sent to external services
+- ✅ **.gitignore protection** for student photos and model files (GDPR compliance)
 
 ---
 
 ## 📊 Results & Impact
 
 - 📉 **~30% reduction** in administrative workload for attendance management
+- 🤖 **Automated attendance marking** through AI facial recognition
 - 🔄 **Full lifecycle coverage** — from scheduling to reporting
 - 🎨 **Intuitive UI** tailored to 3 distinct user profiles
 - 🧩 **Modular, documented codebase** ready for production deployment
 - 🚀 **Improved data accuracy** by replacing manual spreadsheets
+- 🔐 **Privacy-first design** — all AI runs locally
 
 ---
 
 ## 🗺️ Roadmap
 
 - [ ] Email notifications for low attendance thresholds
-- [ ] QR code / OTP-based attendance marking
+- [ ] QR code / OTP-based attendance as an alternative to face recognition
 - [ ] PDF export with institutional branding
 - [ ] REST API for mobile app integration
 - [ ] Docker containerization
 - [ ] Multi-language support (FR / EN / AR)
+- [ ] Face recognition model upgrade (ArcFace / FaceNet)
 
 ---
 
@@ -287,6 +399,8 @@ This project is licensed under the **MIT License** — see the [LICENSE](LICENSE
 ## 🙏 Acknowledgements
 
 - **[Chart.js](https://www.chartjs.org/)** — Interactive data visualization
+- **[OpenCV](https://opencv.org/)** — Face detection & image processing
+- **[VGGFace](https://www.robots.ox.ac.uk/~vgg/software/vgg_face/)** — Deep face recognition model
 - **[XAMPP](https://www.apachefriends.org/)** — Local development environment
 - **[phpMyAdmin](https://www.phpmyadmin.net/)** — Database management
 - **[Shields.io](https://shields.io/)** — Dynamic README badges
@@ -296,5 +410,7 @@ This project is licensed under the **MIT License** — see the [LICENSE](LICENSE
 <div align="center">
 
 ### ⭐ If you find this project useful, please consider giving it a star! ⭐
+
+**Made with ❤️ using PHP, MySQL, Python, OpenCV & VGGFace**
 
 </div>
